@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+"""Tool for analyzing news data provided by Udacity."""
+
+import argparse
+import sys
+
+
+def main(args):
+    """Main entry point for logs-analysis.
+
+    Args:
+        arg (dict): Parsed command line options.
+
+    Returns:
+        int: An exit code; 0 (success) | >0 (failure).
+    """
+    if args.top3_articles:
+        print "Got to top three articles"
+    elif args.top_authors:
+        print "Got to top authors"
+    elif args.days_over_error_threshold:
+        print "Got two days over error threshold"
+    else:
+        print "Run them all"
+
+    return 0
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='Tool for analyzing news data provided by Udacity',
+        usage='logs-analysis [options]')
+
+    command_group = parser.add_mutually_exclusive_group()
+
+    command_group.add_argument(
+        "-ta", "--top3-articles", action="store_true",
+        help="What are the most popular three articles of all time?")
+
+    command_group.add_argument(
+        "-tu", "--top-authors", action="store_true",
+        help="Who are the most popular article authors of all time?")
+
+    command_group.add_argument(
+        "-de", "--days-over-error-threshold", action="store_true",
+        help="Which days did more than 1% of requests lead to errors?")
+
+    args = parser.parse_args()
+    sys.exit(main(args))
