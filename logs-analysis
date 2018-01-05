@@ -4,26 +4,113 @@
 """Tool for analyzing news data provided by Udacity."""
 
 import argparse
+import psycopg2
 import sys
+
+DATABASE_NAME = 'news'
+
+TOP3_ARTICLES = """
+SELECT articles.title, count(*) AS views
+FROM log, articles
+WHERE log.path = '/article/' || articles.slug
+GROUP BY articles.id
+ORDER BY views DESC
+LIMIT 3;
+"""
+
+TOP_AUTHORS = """
+SELECT authors.name, sum(views_by_article) AS views_by_author
+FROM (
+    SELECT articles.author AS author, count(*) AS views_by_article
+    FROM log, articles
+    WHERE log.path = '/article/' || articles.slug
+    GROUP BY articles.id
+    ORDER BY views_by_article
+    ) AS views_by_article_table, authors
+WHERE author = authors.id
+GROUP BY authors.id
+ORDER BY views_by_author DESC;
+"""
+
+ERROR_PERCENTAGE = """
+SELECT *
+FROM (
+    SELECT edb.day, (edb.errors * 100)::decimal / rbd.requests AS percentage
+    FROM errors_by_day edb, requests_by_day rbd
+    WHERE edb.day = rbd.day
+    ) AS percentage_table
+WHERE percentage > 1.0;
+"""
+
+# create view errors_by_day as select time::date as day, count(*) as errors from log where status = '404 NOT FOUND' group by day;
+# create view requests_by_day as select time::date as day, count(*) as requests from log group by day;
+
+
+def run_query(query):
+    """Run a query against a database.
+
+    Args:
+        query (str): Query to run against database.
+
+    Returns:
+        list: Results from query.
+    """
+    with psycopg2.connect(dbname=DATABASE_NAME) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            return cursor.fetchall()
+
+    return []
+
+
+def print_top3_articles():
+    """Print the top three news articles of all time."""
+    print "The most popular articles of all time are:\n"
+    for article, views in run_query(TOP3_ARTICLES):
+        print ' ' * 3,
+        print '"{0}" with {1:,} views'.format(article, views)
+
+
+def print_top_authors():
+    """Print the top three authors of all time."""
+    print "The most popular authors of all time are:\n"
+    for author, views in run_query(TOP_AUTHORS):
+        print ' ' * 3,
+        print '{0} with {1:,} views'.format(author, views)
+
+
+def print_days_over_error_threshold():
+    """Print which days had more than 1% of requests lead to errors."""
+    print "The following days had more than 1% of requests lead to errors:\n"
+    for day, error_percentage in run_query(ERROR_PERCENTAGE):
+        print ' ' * 3,
+        print '{0}: {1:.2f}% of all requests resulted in an error'.format(
+            day, error_percentage)
 
 
 def main(args):
     """Main entry point for logs-analysis.
 
     Args:
-        arg (dict): Parsed command line options.
+        args (Namespace): Parsed command line options.
 
     Returns:
         int: An exit code; 0 (success) | >0 (failure).
     """
     if args.top3_articles:
-        print "Got to top three articles"
+        print_top3_articles()
     elif args.top_authors:
-        print "Got to top authors"
-    elif args.days_over_error_threshold:
-        print "Got two days over error threshold"
+        print_top_authors()
+    elif args.error_thresh:
+        print_days_over_error_threshold()
+    elif args.all:
+        print_top3_articles()
+        print
+        print_top_authors()
+        print
+        print_days_over_error_threshold()
     else:
-        print "Run them all"
+        return 1
 
     return 0
 
@@ -33,19 +120,29 @@ if __name__ == '__main__':
         description='Tool for analyzing news data provided by Udacity',
         usage='logs-analysis [options]')
 
-    command_group = parser.add_mutually_exclusive_group()
+    group = parser.add_mutually_exclusive_group()
 
-    command_group.add_argument(
+    group.add_argument(
+        "-a", "--all", action="store_true",
+        help="show answers to all analysis questions")
+
+    group.add_argument(
         "-ta", "--top3-articles", action="store_true",
-        help="What are the most popular three articles of all time?")
+        help="show the three most popular articles of all time")
 
-    command_group.add_argument(
+    group.add_argument(
         "-tu", "--top-authors", action="store_true",
-        help="Who are the most popular article authors of all time?")
+        help="show the most popular authors of all time")
 
-    command_group.add_argument(
-        "-de", "--days-over-error-threshold", action="store_true",
-        help="Which days did more than 1% of requests lead to errors?")
+    group.add_argument(
+        "-et", "--error-thresh", action="store_true",
+        help="show the days where >1%% of requests led to errors")
 
     args = parser.parse_args()
+
+    # Show help and exit if no arguments are provided
+    if not any(vars(args).values()):
+        parser.print_help()
+        sys.exit(1)
+
     sys.exit(main(args))
