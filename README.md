@@ -1,5 +1,5 @@
-Logs Analysis
-=============
+Project: Logs Analysis
+======================
 
 About
 -----
