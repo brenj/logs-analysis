@@ -7,43 +7,9 @@ import argparse
 import psycopg2
 import sys
 
+import queries
+
 DATABASE_NAME = 'news'
-
-TOP3_ARTICLES = """
-SELECT articles.title, count(*) AS views
-FROM log, articles
-WHERE log.path = '/article/' || articles.slug
-GROUP BY articles.id
-ORDER BY views DESC
-LIMIT 3;
-"""
-
-TOP_AUTHORS = """
-SELECT authors.name, sum(views_by_article) AS views_by_author
-FROM (
-    SELECT articles.author AS author, count(*) AS views_by_article
-    FROM log, articles
-    WHERE log.path = '/article/' || articles.slug
-    GROUP BY articles.id
-    ORDER BY views_by_article
-    ) AS views_by_article_table, authors
-WHERE author = authors.id
-GROUP BY authors.id
-ORDER BY views_by_author DESC;
-"""
-
-ERROR_PERCENTAGE = """
-SELECT *
-FROM (
-    SELECT edb.day, (edb.errors * 100)::decimal / rbd.requests AS percentage
-    FROM errors_by_day edb, requests_by_day rbd
-    WHERE edb.day = rbd.day
-    ) AS percentage_table
-WHERE percentage > 1.0;
-"""
-
-# create view errors_by_day as select time::date as day, count(*) as errors from log where status = '404 NOT FOUND' group by day;
-# create view requests_by_day as select time::date as day, count(*) as requests from log group by day;
 
 
 def run_query(query):
@@ -66,7 +32,7 @@ def run_query(query):
 def print_top3_articles():
     """Print the top three news articles of all time."""
     print "The most popular articles of all time are:\n"
-    for article, views in run_query(TOP3_ARTICLES):
+    for article, views in run_query(queries.TOP3_ARTICLES):
         print ' ' * 3,
         print '"{0}" with {1:,} views'.format(article, views)
 
@@ -74,7 +40,7 @@ def print_top3_articles():
 def print_top_authors():
     """Print the top three authors of all time."""
     print "The most popular authors of all time are:\n"
-    for author, views in run_query(TOP_AUTHORS):
+    for author, views in run_query(queries.TOP_AUTHORS):
         print ' ' * 3,
         print '{0} with {1:,} views'.format(author, views)
 
@@ -82,7 +48,7 @@ def print_top_authors():
 def print_days_over_error_threshold():
     """Print which days had more than 1% of requests lead to errors."""
     print "The following days had more than 1% of requests lead to errors:\n"
-    for day, error_percentage in run_query(ERROR_PERCENTAGE):
+    for day, error_percentage in run_query(queries.ERROR_PERCENTAGE):
         print ' ' * 3,
         print '{0}: {1:.2f}% of all requests resulted in an error'.format(
             day, error_percentage)
