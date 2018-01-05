@@ -47,16 +47,16 @@ GROUP BY day;
 
 Requirements
 ------------
-* Vagrant or postgres and psycopy2
-* Install news data (see [Install Newsdata](https://github.com/brenj/logs-analysis#install-newsdata))
+* Vagrant or `postgres` and `psycopy2`
+* The news database and news data are installed (see [Install Newsdata](https://github.com/brenj/logs-analysis#install-newsdata))
 
 Install
 -------
 There are a number of ways to install `logs-analysis` depending on your
 current setup. To install from scratch:
 
-1. [Install VM](https://github.com/brenj/logs-analysis#install-vm)
-2. [Install Newsdata](https://github.com/brenj/logs-analysis#install-newsdata)
+1. [Install the VM](https://github.com/brenj/logs-analysis#install-vm)
+2. [Install the news data](https://github.com/brenj/logs-analysis#install-newsdata)
 3. [Install logs-analysis](https://github.com/brenj/logs-analysis#install-logs-analysis)
 
 Install VM
@@ -82,7 +82,7 @@ Install logs-analysis
 
 Code Quality
 ------------
-This code base adheres to [PEP8](https://www.python.org/dev/peps/pep-0008/)
+This code base adheres to the [PEP8](https://www.python.org/dev/peps/pep-0008/) standard.
 
 Grading (by Udacity)
 --------------------
