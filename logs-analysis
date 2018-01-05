@@ -51,7 +51,7 @@ def print_days_over_error_threshold():
     for day, error_percentage in run_query(queries.ERROR_PERCENTAGE):
         print ' ' * 3,
         print '{0}: {1:.2f}% of all requests resulted in an error'.format(
-            day, error_percentage)
+            day.strftime('%B %d, %Y'), error_percentage)
 
 
 def main(args):
