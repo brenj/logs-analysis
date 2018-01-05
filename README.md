@@ -15,6 +15,21 @@ Requirements
 ------------
 * Vagrant
 
+Usage
+-----
+```console
+usage: logs-analysis [options]
+
+Tool for analyzing news data provided by Udacity
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -a, --all             show answers to all analysis questions
+  -ta, --top3-articles  show the three most popular articles of all time
+  -tu, --top-authors    show the most popular authors of all time
+  -et, --error-thresh   show the days where >1% of requests led to errors
+```
+
 Views
 -----
 Postgres views used for logs-analysis script.
