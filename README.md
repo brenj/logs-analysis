@@ -67,11 +67,11 @@ Install VM
 
 Install Newsdata
 ----------------
-1. `wget https://github.com/brenj/logs-analysis/blob/master/newsdata.zip?raw=true`
+1. `wget https://github.com/brenj/logs-analysis/blob/master/newsdata.zip?raw=true -O newsdata.zip`
 2. `unzip newsdata.zip`
 3. `psql -d news -f newsdata.sql`
 
-Note: `newsdata.zip` from brenj/logs-analysis contains the necessary views
+Note: `newsdata.zip` from `brenj/logs-analysis` contains the necessary views
 to run `logs-analysis`. If you are using the original `newsdata.zip` data then
 make sure to create the required views (see [Views](https://github.com/brenj/logs-analysis#views)).
 
