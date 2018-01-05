@@ -11,10 +11,6 @@ using advanced SQL queries.
 Supporting courses:
   * Intro to Relational Databases
   
-Requirements
-------------
-* Vagrant
-
 Usage
 -----
 ```console
@@ -49,11 +45,40 @@ WHERE status = '404 NOT FOUND'
 GROUP BY day;
 ```
 
+Requirements
+------------
+* Vagrant or postgres and psycopy2
+* Install news data (see [Install Newsdata](https://github.com/brenj/logs-analysis#install-newsdata))
+
 Install
 -------
+There are a number of ways to install `logs-analysis` depending on your
+current setup. To install from scratch:
+
+1. [Install VM](https://github.com/brenj/logs-analysis#install-vm)
+2. [Install Newsdata](https://github.com/brenj/logs-analysis#install-newsdata)
+3. [Install logs-analysis](https://github.com/brenj/logs-analysis#install-logs-analysis)
+
+Install VM
+----------
 1. `git clone https://github.com/udacity/fullstack-nanodegree-vm.git fullstack && cd fullstack/vagrant`
 2. `vagrant up`
 3. `vagrant ssh`
+
+Install Newsdata
+----------------
+1. `wget https://github.com/brenj/logs-analysis/blob/master/newsdata.zip?raw=true`
+2. `unzip newsdata.zip`
+3. `psql -d news -f newsdata.sql`
+
+Note: `newsdata.zip` from brenj/logs-analysis contains the necessary views
+to run `logs-analysis`. If you are using the original `newsdata.zip` data then
+make sure to create the required views (see [Views](https://github.com/brenj/logs-analysis#views)).
+
+Install logs-analysis
+---------------------
+1. `git clone https://github.com/brenj/logs-analysis.git && cd logs-analysis`
+2. `./logs-analysis --all`
 
 Code Quality
 ------------
@@ -64,6 +89,6 @@ Grading (by Udacity)
 
 Criteria       |Highest Grade Possible  |Grade Recieved
 ---------------|------------------------|-------------------
-Functionality  |Meets Specifications    |Meets Specifications
-Code Quality   |Meets Specifications    |Meets Specifications
-README File    |Meets Specifications    |Meets Specifications
+Functionality  |Meets Specifications    |TDB
+Code Quality   |Meets Specifications    |TDB
+README File    |Meets Specifications    |TDB
