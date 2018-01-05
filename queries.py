@@ -32,6 +32,3 @@ FROM (
     ) AS percentage_table
 WHERE percentage > 1.0;
 """
-
-# create view errors_by_day as select time::date as day, count(*) as errors from log where status = '404 NOT FOUND' group by day;
-# create view requests_by_day as select time::date as day, count(*) as requests from log group by day;
