@@ -1,3 +1,5 @@
+"""SQL queries for logs-analysis."""
+
 TOP3_ARTICLES = """
 SELECT articles.title, count(*) AS views
 FROM log, articles
