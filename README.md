@@ -78,7 +78,7 @@ make sure to create the required views (see [Views](https://github.com/brenj/log
 Install logs-analysis
 ---------------------
 1. `git clone https://github.com/brenj/logs-analysis.git && cd logs-analysis`
-2. `./logs-analysis --all`
+2. `./logs-analysis.py --all`
 
 Code Quality
 ------------
