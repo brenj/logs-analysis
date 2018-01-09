@@ -89,6 +89,6 @@ Grading (by Udacity)
 
 Criteria       |Highest Grade Possible  |Grade Recieved
 ---------------|------------------------|-------------------
-Functionality  |Meets Specifications    |TDB
-Code Quality   |Meets Specifications    |TDB
-README File    |Meets Specifications    |TDB
+Functionality  |Meets Specifications    |Meets Specifications
+Code Quality   |Meets Specifications    |Meets Specifications
+README File    |Meets Specifications    |Meets Specifications
